@@ -1,0 +1,24 @@
+{
+  "name": "technicaltest-reed",
+  "version": "1.0.0",
+  "description": "This is an automation test repository for the UI and API tests of the two case studies.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kweespylicious/TechnicalTest-Reed.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kweespylicious/TechnicalTest-Reed/issues"
+  },
+  "homepage": "https://github.com/kweespylicious/TechnicalTest-Reed#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.0",
+    "@types/node": "^26.1.1",
+    "playwright-bdd": "^9.2.0"
+  }
+}
