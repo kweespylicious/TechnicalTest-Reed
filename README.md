@@ -1,1 +1,16 @@
-This is an automation test repository for the UI and API tests of the two case studies.
+
+# Project Title
+
+This is the repo that contains the tests for the two case studies for Reed.
+
+
+
+
+## Running Tests
+
+To run tests, run the following command
+
+```powershell
+  npx bddgen ; npx playwright test
+```
+
