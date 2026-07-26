@@ -15,9 +15,9 @@ export class Homepage {
         this.logo = page.locator('//span[@class="gPDR-logo-image"]');
         this.profileIcon = page.locator('//div[@aria-label="Sign in"]');
         this.searchInput = page.locator('//input[@placeholder="To?"]');
-        this.departureCalendar = page.locator('//div[@aria-label="Departure date"]');
+        this.departureCalendar = page.getByRole('button', { name: 'Departure date' });
         this.travellersModal = page.locator('//div[@class="cvdH-title" and text()="Travellers"]');
-        this.searchButton = page.locator('//button[@aria-label="Search"]');
+        this.searchButton = page.getByRole('search', { name: 'flight' }).getByLabel('Search', { exact: true });
         this.directFlightsCheckbox = page.locator('//span[text()="Direct flights only"]');
     }
 
@@ -47,6 +47,7 @@ export class Homepage {
 
     async inputSearchDestination(destination: string): Promise<void> {
         await this.searchInput.fill(destination);
+        await this.page.waitForLoadState('networkidle');
         await this.page.keyboard.press('Enter');
     }
 
@@ -58,6 +59,12 @@ export class Homepage {
         const dateLocator = this.page.locator(`//div[@aria-label="${date}"]`);
         await dateLocator.click();
     }
+
+    async selectReturnDate(date: string): Promise<void> {
+        const dateLocator = this.page.getByRole('button', { name: date });
+        await dateLocator.click();
+    }
+
 
     async verifyTravellersModalIsVisible(): Promise<boolean> {
         await this.travellersModal.waitFor({ state: 'visible' });

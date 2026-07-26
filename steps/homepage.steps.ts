@@ -1,27 +1,22 @@
-import { expect } from '@playwright/test';
 import { createBdd } from 'playwright-bdd';
-import { Homepage } from '../pages/home.page.ts';
+import { expect, test } from '../fixtures/fixtures.ts';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(test);
 
-Given('the user navigates to home page', async ({ page }) => {
-    const homepage = new Homepage(page);
-    await homepage.navigateToHomepage();
+Given('the user navigates to home page', async ({ homePage }) => {
+    await homePage.navigateToHomepage();
 });
 
-When('the page is loaded', async ({ page }) => {
-    const homepage = new Homepage(page);
-    await expect(homepage.logo).toBeVisible();
+When('the page is loaded', async ({ homePage }) => {
+    await expect(homePage.logo).toBeVisible();
 });
 
-Then('the logo should be displayed', async ({ page }) => {
-    const homepage = new Homepage(page);
-    const isLogoVisible = await homepage.verifyLogoIsVisible();
+Then('the logo should be displayed', async ({ homePage }) => {
+    const isLogoVisible = await homePage.verifyLogoIsVisible();
     expect(isLogoVisible).toBe(true);
 });
 
-Then('the login button should be displayed', async ({ page }) => {
-    const homepage = new Homepage(page);
-    const isProfileIconVisible = await homepage.verifyProfileIconIsVisible();
+Then('the login button should be displayed', async ({ homePage }) => {
+    const isProfileIconVisible = await homePage.verifyProfileIconIsVisible();
     expect(isProfileIconVisible).toBe(true);
 });

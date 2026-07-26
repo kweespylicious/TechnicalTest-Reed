@@ -10,11 +10,16 @@ export class SearchResultsPage {
     }
 
     async verifySearchResultsAreVisible(): Promise<boolean> {
-        await this.searchResultsContainer.waitFor({ state: 'visible' });
+        await this.searchResultsContainer.first().waitFor({ state: 'visible' });
+        const searchResults = await this.searchResultsContainer.all;
+        if (searchResults.length === 0) {
+            return false;
+        }
         return true;
     }
 
     async getSearchResultsCount(): Promise<number> {
+        await this.searchResultsContainer.first().waitFor({ state: 'visible' });
         const searchResults = await this.searchResultsContainer.all;
         return searchResults.length;
     }
