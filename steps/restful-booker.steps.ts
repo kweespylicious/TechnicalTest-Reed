@@ -1,6 +1,7 @@
 import { createBdd } from 'playwright-bdd';
 import { expect, test } from '../fixtures/fixtures.ts';
 import { booking } from '../templates/restful-booking/CreateBooking.ts';
+import { getInvalidBookingId } from '../helpers/booking-helper.ts';
 
 const { Given, When, Then } = createBdd(test);
 
@@ -58,6 +59,24 @@ When('the user updates a booking', async ({ request, testData }) => {
     testData.updatedBooking = responseBody;
 });
 
+When('the user updates a booking that does not exist', async ({ request, testData }) => {
+  const invalidBookingId = await getInvalidBookingId(request);
+  const updatedBookingData = {
+        ...booking,
+        firstname: 'UpdatedFirstName',
+        lastname: 'UpdatedLastName'
+    };
+  testData.response = await request.put(`/booking/${invalidBookingId}`, {
+    headers: {
+      'Accept': 'application/json',
+      'Cookie': `token=${testData.token}`
+    },
+    data: updatedBookingData
+  });
+
+  expect(testData.response.status()).toBe(405);
+});
+
 When('the user retrieves a booking', async ({ request, testData }) => {
   const bookingIdsResponse = await request.get('/booking');
   expect(bookingIdsResponse).toBeOK();
@@ -81,6 +100,12 @@ When('the user retrieves a booking', async ({ request, testData }) => {
   testData.bookingDetails = responseBody;
 });
 
+When('the user retrieves an invalid booking', async ({ request, testData }) => {
+  const invalidBookingId = await getInvalidBookingId(request);
+  testData.response = await request.get(`/booking/${invalidBookingId}`);
+  expect(testData.response.status()).toBe(404);
+});
+
 When('the user deletes a booking', async ({ request, testData }) => {
   const response = await request.delete(`/booking/${testData.bookingId}`, {
     headers: {
@@ -90,6 +115,15 @@ When('the user deletes a booking', async ({ request, testData }) => {
   expect(response).toBeOK();
 });
 
+When('the user deletes a booking that does not exist', async ({ request, testData }) => {
+  const invalidBookingId = await getInvalidBookingId(request);
+  testData.response = await request.delete(`/booking/${invalidBookingId}`, {
+    headers: {
+      'Cookie': `token=${testData.token}`
+    }
+  });
+  expect(testData.response.status()).toBe(405);
+});
 
 Then('the booking is created successfully', async ({ testData }) => {
   expect(testData.bookingId).not.toBeNull();
@@ -110,4 +144,8 @@ Then('the booking is deleted successfully', async ({ request, testData }) => {
     }
   });
   expect(response.status()).toBe(405);
+});
+
+Then('the response should return a {string} status code', async ({ testData }, statusCode: string) => {
+  expect(testData.response.status()).toBe(parseInt(statusCode));
 });

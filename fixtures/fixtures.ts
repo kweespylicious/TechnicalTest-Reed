@@ -13,6 +13,7 @@ type TestData = {
     token?: string;
     updatedBooking?: any;
     bookingDetails?: any;
+    response?: any;
 };
 
 export const test = base.extend<POMFixtures & {testData: TestData}>({
