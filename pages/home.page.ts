@@ -34,24 +34,23 @@ export class Homepage {
     }
 
     async verifyLogoIsVisible(): Promise<boolean> {
-        await this.logo.waitFor({ state: 'visible' });
-        return true;
+        const logoFound = this.logo.isVisible();
+        return logoFound;
     }
 
     async clickProfileIcon(): Promise<void> {
         await this.profileIcon.click();
-        await this.page.waitForLoadState('networkidle');
     }
 
     async verifyNoFlightsFoundMessageIsVisible(): Promise<boolean> {
         const noFlightsFoundMessage = this.page.locator('div').filter({ hasText: /^No flights found$/ });
-        await noFlightsFoundMessage.isVisible({ timeout: 10000 });
-        return true;
+        const isFound = await noFlightsFoundMessage.isVisible({ timeout: 10000 });
+        return isFound;
     }
 
     async verifyProfileIconIsVisible(): Promise<boolean> {
-        await this.profileIcon.waitFor({ state: 'visible' });
-        return true;
+        const isFound = this.profileIcon.isVisible();
+        return isFound;
     }
 
     async verifySearchInputIsVisible(): Promise<boolean> {
@@ -82,8 +81,8 @@ export class Homepage {
     }
 
     async verifyTravellersModalIsVisible(): Promise<boolean> {
-        await this.travellersModal.waitFor({ state: 'visible' });
-        return true;
+        const isFound = this.travellersModal.isVisible();
+        return isFound;
     }
 
     async selectCabinClass(className: string): Promise<void> {
