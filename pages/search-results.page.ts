@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export class SearchResultsPage {
     readonly page: Page
@@ -10,8 +11,9 @@ export class SearchResultsPage {
     }
 
     async verifySearchResultsAreVisible(): Promise<boolean> {
-        await this.searchResultsContainer.first().waitFor({ state: 'visible' });
-        const searchResults = await this.searchResultsContainer.all;
+        await expect(this.searchResultsContainer.first()).toBeVisible({ timeout: 10000 });
+        const searchResults = await this.searchResultsContainer.all();
+        await searchResults[0].waitFor({ state: 'visible' });
         if (searchResults.length === 0) {
             return false;
         }
@@ -19,8 +21,7 @@ export class SearchResultsPage {
     }
 
     async getSearchResultsCount(): Promise<number> {
-        await this.searchResultsContainer.first().waitFor({ state: 'visible' });
-        const searchResults = await this.searchResultsContainer.all;
+        const searchResults = await this.searchResultsContainer.all();
         return searchResults.length;
     }
 

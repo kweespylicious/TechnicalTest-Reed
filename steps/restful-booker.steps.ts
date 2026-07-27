@@ -40,6 +40,17 @@ When('the user creates a booking', async ({ request, testData }) => {
     testData.bookingId = responseBody.bookingid;
 });
 
+When('the user creates a booking with missing information', async ({request, testData}) => {
+    const {firstname, lastname, ...incompleteBookingData} = booking;
+    testData.response = await request.post('/booking', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        data: incompleteBookingData
+    })
+});
+
 When('the user updates a booking', async ({ request, testData }) => {
     const updatedBookingData = {
         ...booking,

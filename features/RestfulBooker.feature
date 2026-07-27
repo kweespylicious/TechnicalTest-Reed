@@ -7,6 +7,12 @@ Feature: Restful Booker
         Given the user is authenticated
         When the user creates a booking
         Then the booking is created successfully
+
+    @create
+    Scenario: Create Booking With Missing Information
+        Given the user is authenticated
+        When the user creates a booking with missing information
+        Then the response should return a '500' status code
     
     @update
     Scenario: Update Booking
