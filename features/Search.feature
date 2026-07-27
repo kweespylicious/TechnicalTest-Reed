@@ -1,4 +1,4 @@
-@search
+@search @ui
 
 Feature: Search
 

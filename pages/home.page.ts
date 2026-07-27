@@ -4,6 +4,8 @@ export class Homepage {
     readonly page: Page;
     readonly logo: Locator;
     readonly profileIcon: Locator;
+    readonly continueWithEmailButton: Locator;
+    readonly googleLoginButton: Locator;
     readonly searchInput: Locator;
     readonly departureCalendar: Locator;
     readonly travellersModal: Locator;
@@ -23,6 +25,8 @@ export class Homepage {
         this.directFlightsCheckbox = page.locator('//span[text()="Direct flights only"]');
         this.loadingSpinner = page.getByRole('progressbar');
         this.exploreButton = page.getByRole('button', { name: 'Explore' });
+        this.continueWithEmailButton = page.getByRole('button', { name: 'Continue with email' });
+        this.googleLoginButton = page.getByRole('button', { name: 'Google' });
     }
 
     async navigateToHomepage(): Promise<void> {
@@ -32,6 +36,11 @@ export class Homepage {
     async verifyLogoIsVisible(): Promise<boolean> {
         await this.logo.waitFor({ state: 'visible' });
         return true;
+    }
+
+    async clickProfileIcon(): Promise<void> {
+        await this.profileIcon.click();
+        await this.page.waitForLoadState('networkidle');
     }
 
     async verifyNoFlightsFoundMessageIsVisible(): Promise<boolean> {

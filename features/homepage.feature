@@ -1,4 +1,4 @@
-@homepage
+@homepage @ui
 Feature: Homepage
 
     @logo

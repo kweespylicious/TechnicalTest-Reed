@@ -51,6 +51,9 @@ Then('the logo should be displayed', async ({ homePage }) => {
 Then('the login button should be displayed', async ({ homePage }) => {
     const isProfileIconVisible = await homePage.verifyProfileIconIsVisible();
     expect(isProfileIconVisible).toBe(true);
+    await homePage.clickProfileIcon();
+    expect(homePage.continueWithEmailButton).toBeVisible();
+    expect(homePage.googleLoginButton).toBeVisible();
 });
 
 Then('the error modal should be displayed', async ({ homePage }) => {
