@@ -14,6 +14,7 @@ type TestData = {
     updatedBooking?: any;
     bookingDetails?: any;
     response?: any;
+    newTab?: any;
 };
 
 export const test = base.extend<POMFixtures & {testData: TestData}>({

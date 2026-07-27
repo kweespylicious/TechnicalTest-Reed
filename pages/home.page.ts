@@ -9,6 +9,8 @@ export class Homepage {
     readonly travellersModal: Locator;
     readonly searchButton: Locator;
     readonly directFlightsCheckbox: Locator;
+    readonly loadingSpinner: Locator;
+    readonly exploreButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -19,6 +21,8 @@ export class Homepage {
         this.travellersModal = page.locator('//div[@class="cvdH-title" and text()="Travellers"]');
         this.searchButton = page.getByRole('search', { name: 'flight' }).getByLabel('Search', { exact: true });
         this.directFlightsCheckbox = page.locator('//span[text()="Direct flights only"]');
+        this.loadingSpinner = page.getByRole('progressbar');
+        this.exploreButton = page.getByRole('button', { name: 'Explore' });
     }
 
     async navigateToHomepage(): Promise<void> {
@@ -27,6 +31,12 @@ export class Homepage {
 
     async verifyLogoIsVisible(): Promise<boolean> {
         await this.logo.waitFor({ state: 'visible' });
+        return true;
+    }
+
+    async verifyNoFlightsFoundMessageIsVisible(): Promise<boolean> {
+        const noFlightsFoundMessage = this.page.locator('div').filter({ hasText: /^No flights found$/ });
+        await noFlightsFoundMessage.isVisible({ timeout: 10000 });
         return true;
     }
 
@@ -47,16 +57,13 @@ export class Homepage {
 
     async inputSearchDestination(destination: string): Promise<void> {
         await this.searchInput.fill(destination);
-        await this.page.waitForLoadState('networkidle');
-        await this.page.keyboard.press('Enter');
+        await this.loadingSpinner.waitFor({ state: 'hidden' });
+        await this.page.locator(`//span[@class="vPgG-name"][contains(text(),"${destination}")]`).click();
     }
 
-    /*
-    Selects a departure date from the calendar. Month-Day-Year format is expected for the date parameter (e.g., "July 25, 2026").
-    */
     async selectDepartureDate(date: string): Promise<void> {
         await this.departureCalendar.click();
-        const dateLocator = this.page.locator(`//div[@aria-label="${date}"]`);
+        const dateLocator = this.page.locator(`//div[contains(@aria-label,"${date}")]`);
         await dateLocator.click();
     }
 
@@ -65,15 +72,11 @@ export class Homepage {
         await dateLocator.click();
     }
 
-
     async verifyTravellersModalIsVisible(): Promise<boolean> {
         await this.travellersModal.waitFor({ state: 'visible' });
         return true;
     }
 
-    /*
-    Selects a cabin class based on the provided className (e.g., "Economy", "Premium Economy", "Business", "First").
-    */
     async selectCabinClass(className: string): Promise<void> {
         const cabinClassLocator = this.page.locator(`//label[@data-text="${className}"]`);
         await cabinClassLocator.click();
@@ -81,5 +84,21 @@ export class Homepage {
 
     async clickSearchButton(): Promise<void> {
         await this.searchButton.click();
+    }
+
+    async clickExploreButton(): Promise<void> {
+        await this.exploreButton.click();
+    }
+
+    async verifyErrorModalIsVisible(): Promise<boolean> {
+        const errorModalLocator = this.page.getByText('An error occurred while');
+        const isVisible = await errorModalLocator.isVisible();
+        return isVisible;
+    }
+
+    async verifyNoAirportSelectedModalIsVisible(): Promise<boolean> {
+        const noAirportSelectedModal = this.page.getByText('You didn\'t select an airport');
+        const isVisible = await noAirportSelectedModal.isVisible();
+        return isVisible;
     }
 }
