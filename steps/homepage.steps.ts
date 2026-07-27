@@ -46,11 +46,13 @@ When('the user clicks the Explore button', async ({ homePage }) => {
 Then('the logo should be displayed', async ({ homePage }) => {
     const isLogoVisible = await homePage.verifyLogoIsVisible();
     expect(isLogoVisible).toBe(true);
+    expect(await homePage.verifyLogoPosition()).toBe(true);
 });
 
 Then('the login button should be displayed', async ({ homePage }) => {
     const isProfileIconVisible = await homePage.verifyProfileIconIsVisible();
     expect(isProfileIconVisible).toBe(true);
+    expect(await homePage.verifyProfileIconPosition()).toBe(true);
     await homePage.clickProfileIcon();
     expect(homePage.continueWithEmailButton).toBeVisible();
     expect(homePage.googleLoginButton).toBeVisible();

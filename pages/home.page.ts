@@ -38,6 +38,24 @@ export class Homepage {
         return logoFound;
     }
 
+    async verifyLogoPosition(): Promise<boolean> {
+        const logo = await this.logo.boundingBox();
+        const profileIcon = await this.profileIcon.boundingBox();
+        if (!logo || !profileIcon) {
+            return false;
+        }
+        return logo.x < profileIcon.x;
+    }
+
+    async verifyProfileIconPosition(): Promise<boolean> {
+        const logo = await this.logo.boundingBox();
+        const profileIcon = await this.profileIcon.boundingBox();
+        if (!logo || !profileIcon) {
+            return false;
+        }
+        return profileIcon.x > logo.x;
+    }
+
     async clickProfileIcon(): Promise<void> {
         await this.profileIcon.click();
     }
